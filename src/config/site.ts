@@ -1,0 +1,31 @@
+export const SITE_CONFIG = {
+  name: import.meta.env.VITE_AGENCY_NAME || "Haven Crest Luxury Real Estate",
+  shortName: "Haven Crest",
+  tagline: "Prime Residences, Architectural Estates & Private Advisory",
+  description: "Exclusive representation for premier residential properties, diplomatic estates, and high-yield luxury investments.",
+  phone: import.meta.env.VITE_AGENCY_PHONE || "+254 712 345 678",
+  email: import.meta.env.VITE_AGENCY_EMAIL || "concierge@havencrest-realty.com",
+  address: import.meta.env.VITE_AGENCY_ADDRESS || "The Pavilion, Suite 1200, Karen, Nairobi",
+  whatsapp: "+254712345678",
+  currency: {
+    symbol: "KES",
+    code: "KES",
+    locale: "en-KE",
+  },
+  social: {
+    instagram: "https://instagram.com",
+    linkedin: "https://linkedin.com",
+    youtube: "https://youtube.com",
+  },
+  navLinks: [
+    { label: "Buy", href: "/buy" },
+    { label: "Rent", href: "/rent" },
+    { label: "Neighborhoods", href: "/neighborhoods" },
+    { label: "Agents", href: "/agents" },
+    { label: "Financing", href: "/financing" },
+    { label: "Valuation", href: "/valuation" },
+    { label: "Insights", href: "/blog" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+  ],
+};
