@@ -16,7 +16,7 @@ export function useBlogPost(slug: string | undefined) {
     queryKey: ['blog_post', slug],
     enabled: Boolean(slug),
     queryFn: async () => {
-      const posts = mockDb.getBlogs();
+      const posts = await mockDb.getBlogs();
       return posts.find(p => p.slug === slug) || null;
     },
   });
@@ -26,7 +26,8 @@ export function useSaveBlogPostMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (post: BlogPost) => {
-      const existing = mockDb.getBlogs().find(p => p.id === post.id);
+      const existingPosts = await mockDb.getBlogs();
+      const existing = existingPosts.find(p => p.id === post.id);
       if (existing) {
         return mockDb.updateBlogPost(post.id, post);
       }

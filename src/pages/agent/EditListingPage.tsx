@@ -49,7 +49,7 @@ export const EditListingPage: React.FC = () => {
 
   const onSubmit = async (data: PropertyFormData) => {
     if (id) {
-      mockDb.updateProperty(id, {
+      await mockDb.updateProperty(id, {
         title: data.title,
         listing_type: data.listing_type,
         status: data.status,

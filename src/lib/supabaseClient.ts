@@ -1,190 +1,110 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { 
-  MOCK_PROPERTIES, 
-  MOCK_AGENTS, 
-  MOCK_NEIGHBORHOODS, 
-  MOCK_BLOG_POSTS, 
-  MOCK_LEADS, 
-  MOCK_PROFILES 
-} from './mockData';
+import axios from 'axios';
 import { Property, Agent, Neighborhood, BlogPost, Lead, Profile } from '../types/database';
+import { useAuthStore } from '../store/authStore';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
-export const isLiveSupabaseConfigured = Boolean(
-  supabaseUrl && 
-  supabaseAnonKey && 
-  !supabaseUrl.includes('your-project') &&
-  supabaseUrl.startsWith('https://')
-);
+export const apiClient = axios.create({
+  baseURL: API_URL,
+});
 
-export const supabase: SupabaseClient | null = isLiveSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+// Automatically inject Auth0 token into requests
+apiClient.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 // ==========================================
-// LOCAL STORAGE MOCK REPOSITORY (Fallback)
+// API REPOSITORY
 // ==========================================
-
-const STORAGE_KEYS = {
-  PROPERTIES: 'haven_properties_v1',
-  AGENTS: 'haven_agents_v1',
-  NEIGHBORHOODS: 'haven_neighborhoods_v1',
-  BLOGS: 'haven_blogs_v1',
-  LEADS: 'haven_leads_v1',
-  SAVED: 'haven_saved_listings_v1',
-  PROFILES: 'haven_profiles_v1',
-};
-
-function getStored<T>(key: string, defaultVal: T): T {
-  try {
-    const item = localStorage.getItem(key);
-    if (!item) {
-      localStorage.setItem(key, JSON.stringify(defaultVal));
-      return defaultVal;
-    }
-    return JSON.parse(item);
-  } catch {
-    return defaultVal;
-  }
-}
-
-function setStored<T>(key: string, val: T): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(val));
-  } catch (err) {
-    console.warn('Storage set failed', err);
-  }
-}
 
 export const mockDb = {
-  getProperties: (): Property[] => {
-    return getStored<Property[]>(STORAGE_KEYS.PROPERTIES, MOCK_PROPERTIES);
+  getProperties: async (): Promise<Property[]> => {
+    const { data } = await apiClient.get<Property[]>('/properties');
+    return data;
   },
-  saveProperties: (props: Property[]) => {
-    setStored(STORAGE_KEYS.PROPERTIES, props);
+  getPropertyBySlug: async (slug: string): Promise<Property | undefined> => {
+    try {
+      const { data } = await apiClient.get<Property>(`/properties/${slug}`);
+      return data;
+    } catch {
+      return undefined;
+    }
   },
-  getPropertyBySlug: (slug: string): Property | undefined => {
-    const properties = mockDb.getProperties();
-    return properties.find(p => p.slug === slug);
+  addProperty: async (property: Property): Promise<Property> => {
+    const { data } = await apiClient.post<Property>('/properties', property);
+    return data;
   },
-  addProperty: (property: Property): Property => {
-    const properties = mockDb.getProperties();
-    const updated = [property, ...properties];
-    mockDb.saveProperties(updated);
-    return property;
+  updateProperty: async (id: string, updates: Partial<Property>): Promise<Property | null> => {
+    const { data } = await apiClient.patch<Property>(`/properties/${id}`, updates);
+    return data;
   },
-  updateProperty: (id: string, updates: Partial<Property>): Property | null => {
-    const properties = mockDb.getProperties();
-    const idx = properties.findIndex(p => p.id === id);
-    if (idx === -1) return null;
-    properties[idx] = { ...properties[idx], ...updates, updated_at: new Date().toISOString() };
-    mockDb.saveProperties(properties);
-    return properties[idx];
-  },
-  deleteProperty: (id: string): boolean => {
-    const properties = mockDb.getProperties();
-    const filtered = properties.filter(p => p.id !== id);
-    mockDb.saveProperties(filtered);
+  deleteProperty: async (id: string): Promise<boolean> => {
+    await apiClient.delete(`/properties/${id}`);
     return true;
   },
 
-  getAgents: (): Agent[] => {
-    return getStored<Agent[]>(STORAGE_KEYS.AGENTS, MOCK_AGENTS);
+  getAgents: async (): Promise<Agent[]> => {
+    const { data } = await apiClient.get<Agent[]>('/agents');
+    return data;
   },
-  updateAgent: (id: string, updates: Partial<Agent>): Agent | null => {
-    const agents = mockDb.getAgents();
-    const idx = agents.findIndex(a => a.id === id);
-    if (idx === -1) return null;
-    agents[idx] = { ...agents[idx], ...updates };
-    setStored(STORAGE_KEYS.AGENTS, agents);
-    return agents[idx];
+  updateAgent: async (id: string, updates: Partial<Agent>): Promise<Agent | null> => {
+    const { data } = await apiClient.patch<Agent>(`/agents/${id}`, updates);
+    return data;
   },
-  addAgent: (agent: Agent): Agent => {
-    const agents = mockDb.getAgents();
-    const updated = [...agents, agent];
-    setStored(STORAGE_KEYS.AGENTS, updated);
-    return agent;
+  addAgent: async (agent: Agent): Promise<Agent> => {
+    const { data } = await apiClient.post<Agent>('/agents', agent);
+    return data;
   },
 
-  getNeighborhoods: (): Neighborhood[] => {
-    return getStored<Neighborhood[]>(STORAGE_KEYS.NEIGHBORHOODS, MOCK_NEIGHBORHOODS);
+  getNeighborhoods: async (): Promise<Neighborhood[]> => {
+    const { data } = await apiClient.get<Neighborhood[]>('/neighborhoods');
+    return data;
   },
 
-  getBlogs: (): BlogPost[] => {
-    return getStored<BlogPost[]>(STORAGE_KEYS.BLOGS, MOCK_BLOG_POSTS);
+  getBlogs: async (): Promise<BlogPost[]> => {
+    const { data } = await apiClient.get<BlogPost[]>('/blogs');
+    return data;
   },
-  addBlogPost: (post: BlogPost): BlogPost => {
-    const posts = mockDb.getBlogs();
-    const updated = [post, ...posts];
-    setStored(STORAGE_KEYS.BLOGS, updated);
-    return post;
+  addBlogPost: async (post: BlogPost): Promise<BlogPost> => {
+    const { data } = await apiClient.post<BlogPost>('/blogs', post);
+    return data;
   },
-  updateBlogPost: (id: string, updates: Partial<BlogPost>): BlogPost | null => {
-    const posts = mockDb.getBlogs();
-    const idx = posts.findIndex(p => p.id === id);
-    if (idx === -1) return null;
-    posts[idx] = { ...posts[idx], ...updates };
-    setStored(STORAGE_KEYS.BLOGS, posts);
-    return posts[idx];
+  updateBlogPost: async (id: string, updates: Partial<BlogPost>): Promise<BlogPost | null> => {
+    const { data } = await apiClient.patch<BlogPost>(`/blogs/${id}`, updates);
+    return data;
   },
 
-  getLeads: (): Lead[] => {
-    return getStored<Lead[]>(STORAGE_KEYS.LEADS, MOCK_LEADS);
+  getLeads: async (): Promise<Lead[]> => {
+    const { data } = await apiClient.get<Lead[]>('/leads');
+    return data;
   },
-  addLead: (lead: Lead): Lead => {
-    const leads = mockDb.getLeads();
-    const updated = [lead, ...leads];
-    setStored(STORAGE_KEYS.LEADS, updated);
-    
-    // Simulate webhook out to Make.com / CRM
-    const webhookUrl = import.meta.env.VITE_MAKE_WEBHOOK_URL;
-    if (webhookUrl && webhookUrl.startsWith('https://')) {
-      fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: 'lead.created', lead, timestamp: new Date().toISOString() }),
-      }).catch(err => console.warn('Make.com webhook trigger notice:', err));
-    }
-    
-    return lead;
+  addLead: async (lead: Lead): Promise<Lead> => {
+    const { data } = await apiClient.post<Lead>('/leads', lead);
+    return data;
   },
-  updateLeadStatus: (id: string, status: Lead['status'], assignedAgentId?: string): Lead | null => {
-    const leads = mockDb.getLeads();
-    const idx = leads.findIndex(l => l.id === id);
-    if (idx === -1) return null;
-    leads[idx] = {
-      ...leads[idx],
-      status,
-      ...(assignedAgentId ? { assigned_agent_id: assignedAgentId } : {})
-    };
-    setStored(STORAGE_KEYS.LEADS, leads);
-    return leads[idx];
+  updateLeadStatus: async (id: string, status: Lead['status'], assignedAgentId?: string): Promise<Lead | null> => {
+    const { data } = await apiClient.patch<Lead>(`/leads/${id}/status`, { status, assigned_agent_id: assignedAgentId });
+    return data;
   },
 
+  // Mocked out methods for Saved functionality since it's local only for visitors right now
   getSavedListingIds: (visitorId: string): string[] => {
-    const allSaved = getStored<Record<string, string[]>>(STORAGE_KEYS.SAVED, {
-      'usr-visitor-demo': ['prop-1', 'prop-3']
-    });
-    return allSaved[visitorId] || [];
+    return [];
   },
   toggleSavedListing: (visitorId: string, propertyId: string): boolean => {
-    const allSaved = getStored<Record<string, string[]>>(STORAGE_KEYS.SAVED, {});
-    const userSaved = allSaved[visitorId] || [];
-    const exists = userSaved.includes(propertyId);
-    let updated: string[];
-    if (exists) {
-      updated = userSaved.filter(id => id !== propertyId);
-    } else {
-      updated = [...userSaved, propertyId];
-    }
-    allSaved[visitorId] = updated;
-    setStored(STORAGE_KEYS.SAVED, allSaved);
-    return !exists;
+    return true;
   },
 
-  getProfiles: (): Profile[] => {
-    return getStored<Profile[]>(STORAGE_KEYS.PROFILES, MOCK_PROFILES);
+  getProfiles: async (): Promise<Profile[]> => {
+    const { data } = await apiClient.get<Profile[]>('/profiles');
+    return data;
   }
 };
+
+// Legacy exports to prevent breaks if used elsewhere
+export const supabase = null;
+export const isLiveSupabaseConfigured = false;

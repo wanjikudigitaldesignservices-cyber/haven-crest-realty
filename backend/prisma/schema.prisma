@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id         String   @id @default(uuid())
+  role       String
+  full_name  String?
+  phone      String?
+  avatar_url String?
+  email      String?
+  created_at DateTime @default(now())
+
+  agent Agent?
+}
+
+model Agent {
+  id               String   @id @default(uuid())
+  bio              String?
+  years_experience Int?
+  specialties      String   // Stored as JSON array string
+  license_number   String?
+  whatsapp_number  String?
+  is_active        Boolean  @default(true)
+  profile_id       String   @unique
+  profile          Profile  @relation(fields: [profile_id], references: [id])
+
+  properties       Property[]
+  leads            Lead[]
+  blog_posts       BlogPost[]
+}
+
+model Neighborhood {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  name          String
+  description   String?
+  image_url     String?
+  market_trend  String?
+  avg_price_sqm Int?
+  lat           Float?
+  lng           Float?
+}
+
+model Property {
+  id              String   @id @default(uuid())
+  agent_id        String
+  agent           Agent    @relation(fields: [agent_id], references: [id])
+  neighborhood_id String
+  slug            String   @unique
+  title           String
+  description     String?
+  listing_type    String
+  status          String
+  price           Int
+  bedrooms        Int
+  bathrooms       Int
+  size_sqm        Int
+  lat             Float
+  lng             Float
+  address         String
+  featured        Boolean  @default(false)
+  amenities       String   // Stored as JSON array string
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  images          PropertyImage[]
+  leads           Lead[]
+}
+
+model PropertyImage {
+  id           String   @id @default(uuid())
+  property_id  String
+  property     Property @relation(fields: [property_id], references: [id])
+  storage_path String
+  position     Int
+}
+
+model BlogPost {
+  id         String   @id @default(uuid())
+  author_id  String
+  author     Agent    @relation(fields: [author_id], references: [id])
+  slug       String   @unique
+  title      String
+  summary    String?
+  content    String
+  cover_url  String?
+  published  Boolean  @default(false)
+  created_at DateTime @default(now())
+}
+
+model Lead {
+  id                String   @id @default(uuid())
+  type              String
+  status            String
+  property_id       String?
+  property          Property? @relation(fields: [property_id], references: [id])
+  assigned_agent_id String?
+  assigned_agent    Agent?   @relation(fields: [assigned_agent_id], references: [id])
+  name              String
+  email             String
+  phone             String
+  message           String?
+  preferred_date    String?
+  created_at        DateTime @default(now())
+}

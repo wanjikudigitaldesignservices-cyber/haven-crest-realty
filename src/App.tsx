@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { RoleRoute } from './components/shared/RoleRoute';
+import { AuthSync } from './components/shared/AuthSync';
 
 // Public Pages (21 routes)
 import { HomePage } from './pages/public/HomePage';
@@ -54,6 +55,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-brand-stone-50 text-brand-stone-900 selection:bg-brand-gold selection:text-brand-dark">
+      <AuthSync />
       {/* Public Navbar (hidden on portal dashboards) */}
       {!isPortalRoute && <Navbar />}
 

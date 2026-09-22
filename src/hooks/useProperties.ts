@@ -34,10 +34,10 @@ export function useProperties(filters?: PropertyFilterState) {
         if (!error && data) {
           properties = data as Property[];
         } else {
-          properties = mockDb.getProperties();
+          properties = await mockDb.getProperties();
         }
       } else {
-        properties = mockDb.getProperties();
+        properties = await mockDb.getProperties();
       }
 
       // Filter locally for smooth mock and responsive experience
@@ -93,8 +93,9 @@ export function useProperty(slug: string | undefined) {
     queryKey: ['property', slug],
     enabled: Boolean(slug),
     queryFn: async () => {
-      if (!slug) return null;
-      const prop = mockDb.getPropertyBySlug(slug);
+      if (!slug) throw new Error('Slug is required');
+
+      const prop = await mockDb.getPropertyBySlug(slug);
       return prop || null;
     },
   });

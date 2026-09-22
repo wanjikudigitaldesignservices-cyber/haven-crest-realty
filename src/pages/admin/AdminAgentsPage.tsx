@@ -27,7 +27,7 @@ export const AdminAgentsPage: React.FC = () => {
     updateMutation.mutate({ id, updates: { is_active: !current } });
   };
 
-  const handleCreateAgent = (e: React.FormEvent) => {
+  const handleCreateAgent = async (e: React.FormEvent) => {
     e.preventDefault();
     const newId = `usr-agent-${Date.now()}`;
     const generatedPassword = Math.random().toString(36).slice(-8) + 'Aa1!';
@@ -41,7 +41,7 @@ export const AdminAgentsPage: React.FC = () => {
       created_at: new Date().toISOString(),
     };
 
-    mockDb.addAgent({
+    await mockDb.addAgent({
       id: newId,
       bio: newBio || 'Senior advisor specializing in prime East African real estate.',
       years_experience: 5,
@@ -50,12 +50,6 @@ export const AdminAgentsPage: React.FC = () => {
       whatsapp_number: newPhone || '+254700000000',
       is_active: true,
       profile: newProfile,
-    });
-
-    addUser({
-      ...newProfile,
-      email: newEmail,
-      password: generatedPassword,
     });
 
     alert(`Successfully provisioned agent!\n\nEmail sent to ${newEmail} with credentials:\n\nEmail: ${newEmail}\nPassword: ${generatedPassword}`);

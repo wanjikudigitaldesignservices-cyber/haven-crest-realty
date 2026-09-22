@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: haven-crest-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: DATABASE_URL
+        value: "file:./data/dev.db" # using a persisted disk or environment is better for production
+      - key: AUTH0_AUDIENCE
+        value: YOUR_AUTH0_AUDIENCE
+      - key: AUTH0_ISSUER_BASE_URL
+        value: https://YOUR_AUTH0_DOMAIN.auth0.com/
+
+  - type: web
+    name: haven-crest-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: haven-crest-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: VITE_AUTH0_DOMAIN
+        value: YOUR_AUTH0_DOMAIN.auth0.com
+      - key: VITE_AUTH0_CLIENT_ID
+        value: YOUR_AUTH0_CLIENT_ID
+      - key: VITE_AUTH0_AUDIENCE
+        value: YOUR_AUTH0_AUDIENCE

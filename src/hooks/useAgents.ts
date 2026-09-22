@@ -16,7 +16,7 @@ export function useAgent(idOrSlug: string | undefined) {
     queryKey: ['agent', idOrSlug],
     enabled: Boolean(idOrSlug),
     queryFn: async () => {
-      const agents = mockDb.getAgents();
+      const agents = await mockDb.getAgents();
       return agents.find(a => a.id === idOrSlug || a.profile?.full_name?.toLowerCase().replace(/\s+/g, '-') === idOrSlug) || null;
     },
   });

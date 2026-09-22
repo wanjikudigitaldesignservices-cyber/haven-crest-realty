@@ -16,7 +16,7 @@ export function useNeighborhood(slug: string | undefined) {
     queryKey: ['neighborhood', slug],
     enabled: Boolean(slug),
     queryFn: async () => {
-      const neighborhoods = mockDb.getNeighborhoods();
+      const neighborhoods = await mockDb.getNeighborhoods();
       return neighborhoods.find(n => n.slug === slug) || null;
     },
   });
