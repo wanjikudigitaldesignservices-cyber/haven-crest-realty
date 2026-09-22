@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { UserRole, Profile } from '../types/database';
 import { MOCK_PROFILES } from '../lib/mockData';
 
@@ -7,51 +8,69 @@ interface AuthState {
   role: UserRole;
   isAuthenticated: boolean;
   isLoading: boolean;
+  users: (Profile & { email?: string; password?: string })[];
   
   // Actions
-  loginAs: (role: UserRole) => void;
+  login: (email: string, password: string, role: UserRole) => boolean;
   logout: () => void;
-  setRole: (role: UserRole) => void;
+  addUser: (user: Profile & { email?: string; password?: string }) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  // Default to visitor persona for public view
-  user: MOCK_PROFILES.find(p => p.role === 'visitor') || null,
-  role: 'visitor',
-  isAuthenticated: true,
-  isLoading: false,
-
-  loginAs: (role: UserRole) => {
-    const matchedProfile = MOCK_PROFILES.find(p => p.role === role) || {
-      id: `usr-${role}-${Date.now()}`,
-      role,
-      full_name: role === 'admin' ? 'Victoria Alistair' : role === 'agent' ? 'Marcus Sterling' : 'Jonathan Miller',
-      phone: '+254 700 000 000',
-      avatar_url: null,
-      created_at: new Date().toISOString(),
-    };
-
-    set({
-      user: matchedProfile,
-      role,
-      isAuthenticated: true,
-    });
-  },
-
-  logout: () => {
-    set({
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      // Default to visitor persona for public view
       user: null,
       role: 'visitor',
       isAuthenticated: false,
-    });
-  },
+      isLoading: false,
+      users: [
+        {
+          ...MOCK_PROFILES[0], // admin
+          email: 'admin@havencrest.com',
+          password: 'AdminPassword123'
+        },
+        ...MOCK_PROFILES.filter(p => p.role === 'agent').map(p => ({
+          ...p,
+          email: `${p.full_name?.split(' ')[0].toLowerCase()}@havencrest.com`,
+          password: 'AgentPassword123'
+        }))
+      ],
 
-  setRole: (role: UserRole) => {
-    const matchedProfile = MOCK_PROFILES.find(p => p.role === role) || null;
-    set({
-      role,
-      user: matchedProfile,
-      isAuthenticated: Boolean(matchedProfile),
-    });
-  },
-}));
+      login: (email, password, role) => {
+        const { users } = get();
+        const matchedUser = users.find(
+          u => u.email === email && u.password === password && u.role === role
+        );
+
+        if (matchedUser) {
+          set({
+            user: matchedUser,
+            role: matchedUser.role,
+            isAuthenticated: true,
+          });
+          return true;
+        }
+        return false;
+      },
+
+      logout: () => {
+        set({
+          user: null,
+          role: 'visitor',
+          isAuthenticated: false,
+        });
+      },
+
+      addUser: (newUser) => {
+        set((state) => ({
+          users: [...state.users, newUser],
+        }));
+      }
+    }),
+    {
+      name: 'havencrest-auth-storage',
+      partialize: (state) => ({ users: state.users, user: state.user, role: state.role, isAuthenticated: state.isAuthenticated }),
+    }
+  )
+);

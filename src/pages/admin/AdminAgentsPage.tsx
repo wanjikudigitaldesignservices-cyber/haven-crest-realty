@@ -8,11 +8,13 @@ import { Modal } from '../../components/ui/Modal';
 import { Input, Textarea } from '../../components/ui/Input';
 import { Users, UserPlus, Check, X, Shield, Phone, MessageSquare } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../store/authStore';
 
 export const AdminAgentsPage: React.FC = () => {
   const { data: agents = [], isLoading } = useAgents();
   const updateMutation = useUpdateAgentMutation();
   const queryClient = useQueryClient();
+  const { addUser } = useAuthStore();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newFullName, setNewFullName] = useState('');
@@ -28,6 +30,17 @@ export const AdminAgentsPage: React.FC = () => {
   const handleCreateAgent = (e: React.FormEvent) => {
     e.preventDefault();
     const newId = `usr-agent-${Date.now()}`;
+    const generatedPassword = Math.random().toString(36).slice(-8) + 'Aa1!';
+    
+    const newProfile = {
+      id: newId,
+      role: 'agent' as const,
+      full_name: newFullName,
+      phone: newPhone,
+      avatar_url: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=400&q=80',
+      created_at: new Date().toISOString(),
+    };
+
     mockDb.addAgent({
       id: newId,
       bio: newBio || 'Senior advisor specializing in prime East African real estate.',
@@ -36,15 +49,16 @@ export const AdminAgentsPage: React.FC = () => {
       license_number: newLicense || 'EARB-NAI-9999',
       whatsapp_number: newPhone || '+254700000000',
       is_active: true,
-      profile: {
-        id: newId,
-        role: 'agent',
-        full_name: newFullName,
-        phone: newPhone,
-        avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-        created_at: new Date().toISOString(),
-      },
+      profile: newProfile,
     });
+
+    addUser({
+      ...newProfile,
+      email: newEmail,
+      password: generatedPassword,
+    });
+
+    alert(`Successfully provisioned agent!\n\nEmail sent to ${newEmail} with credentials:\n\nEmail: ${newEmail}\nPassword: ${generatedPassword}`);
 
     queryClient.invalidateQueries({ queryKey: ['agents'] });
     setIsAddModalOpen(false);

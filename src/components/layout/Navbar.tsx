@@ -123,11 +123,18 @@ export const Navbar: React.FC = () => {
                   </Button>
                 </Link>
               ) : (
-                <Link to="/valuation">
-                  <Button variant="gold" size="sm">
-                    Request Valuation
-                  </Button>
-                </Link>
+                <div className="flex items-center space-x-2">
+                  <Link to="/valuation">
+                    <Button variant="gold" size="sm">
+                      Request Valuation
+                    </Button>
+                  </Link>
+                  <Link to="/login">
+                    <Button variant="outline" size="sm" className="text-white border-white/20 hover:bg-white/10">
+                      Login
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
 
@@ -192,17 +199,22 @@ export const Navbar: React.FC = () => {
               </Link>
 
               {/* Portal Quick Access for logged-in agent/admin */}
-              {role === 'admin' && (
+              {role === 'admin' ? (
                 <Link to="/admin/dashboard" className="block">
                   <Button variant="secondary" className="w-full">
                     Go to Admin Dashboard
                   </Button>
                 </Link>
-              )}
-              {role === 'agent' && (
+              ) : role === 'agent' ? (
                 <Link to="/agent/dashboard" className="block">
                   <Button variant="secondary" className="w-full">
                     Go to Agent Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/login" className="block">
+                  <Button variant="secondary" className="w-full text-white border-white/20">
+                    Login
                   </Button>
                 </Link>
               )}

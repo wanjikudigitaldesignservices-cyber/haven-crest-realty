@@ -10,27 +10,27 @@ export const MOCK_PROFILES: Profile[] = [
     created_at: '2026-01-10T08:00:00Z',
   },
   {
-    id: 'usr-agent-marcus',
+    id: 'usr-agent-kwame',
     role: 'agent',
-    full_name: 'Marcus Sterling',
+    full_name: 'Kwame Omondi',
     phone: '+254 722 345 678',
-    avatar_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80',
+    avatar_url: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=600&q=80',
     created_at: '2026-01-15T09:30:00Z',
   },
   {
-    id: 'usr-agent-elena',
+    id: 'usr-agent-amina',
     role: 'agent',
-    full_name: 'Elena Vance',
+    full_name: 'Amina Hassan',
     phone: '+254 733 987 654',
-    avatar_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80',
+    avatar_url: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80',
     created_at: '2026-01-20T11:00:00Z',
   },
   {
-    id: 'usr-agent-tariq',
+    id: 'usr-agent-juma',
     role: 'agent',
-    full_name: 'Tariq Al-Mansoor',
+    full_name: 'Juma Kiptoo',
     phone: '+254 744 112 233',
-    avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
+    avatar_url: 'https://images.unsplash.com/photo-1566492031773-4f4e13e6d486?auto=format&fit=crop&w=600&q=80',
     created_at: '2026-02-01T14:15:00Z',
   },
   {
@@ -45,7 +45,7 @@ export const MOCK_PROFILES: Profile[] = [
 
 export const MOCK_AGENTS: Agent[] = [
   {
-    id: 'usr-agent-marcus',
+    id: 'usr-agent-kwame',
     bio: 'Senior Managing Broker with over 14 years advising diplomatic missions, private equity principals, and legacy families on trophy acquisitions in Karen and Muthaiga.',
     years_experience: 14,
     specialties: ['Trophy Estates', 'Diplomatic Relocation', 'Heritage Properties', 'Land Parcels'],
@@ -55,7 +55,7 @@ export const MOCK_AGENTS: Agent[] = [
     profile: MOCK_PROFILES[1],
   },
   {
-    id: 'usr-agent-elena',
+    id: 'usr-agent-amina',
     bio: 'Modern architecture enthusiast with a decade of expertise marketing prime sky penthouses and luxury sustainable riverside residences for institutional investors.',
     years_experience: 10,
     specialties: ['Luxury Penthouses', 'Off-Plan Advisory', 'High-Yield Rentals', 'Waterfront Living'],
@@ -65,7 +65,7 @@ export const MOCK_AGENTS: Agent[] = [
     profile: MOCK_PROFILES[2],
   },
   {
-    id: 'usr-agent-tariq',
+    id: 'usr-agent-juma',
     bio: 'Trusted strategic advisor for foreign direct investments, commercial plots, and gated villa compounds across Kitisuru and surrounding diplomatic enclaves.',
     years_experience: 11,
     specialties: ['Investment Portfolios', 'Private Gated Villas', 'Asset Diversification', 'Due Diligence'],
@@ -118,7 +118,7 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
 export const MOCK_PROPERTIES: Property[] = [
   {
     id: 'prop-1',
-    agent_id: 'usr-agent-marcus',
+    agent_id: 'usr-agent-kwame',
     neighborhood_id: 'neigh-karen',
     slug: 'the-glass-pavilion-karen',
     title: 'The Glass Pavilion & Botanical Estate',
@@ -154,7 +154,7 @@ export const MOCK_PROPERTIES: Property[] = [
   },
   {
     id: 'prop-2',
-    agent_id: 'usr-agent-marcus',
+    agent_id: 'usr-agent-kwame',
     neighborhood_id: 'neigh-muthaiga',
     slug: 'muthaiga-colonial-manor',
     title: 'Muthaiga Colonial Manor & Private Forest',
@@ -189,7 +189,7 @@ export const MOCK_PROPERTIES: Property[] = [
   },
   {
     id: 'prop-3',
-    agent_id: 'usr-agent-elena',
+    agent_id: 'usr-agent-amina',
     neighborhood_id: 'neigh-riverside',
     slug: 'the-azure-sky-penthouse',
     title: 'The Azure Sky Penthouse at Riverside',
@@ -223,7 +223,7 @@ export const MOCK_PROPERTIES: Property[] = [
   },
   {
     id: 'prop-4',
-    agent_id: 'usr-agent-tariq',
+    agent_id: 'usr-agent-juma',
     neighborhood_id: 'neigh-kitisuru',
     slug: 'kitisuru-waterfall-residence',
     title: 'The Waterfall Residence at Kitisuru Ravine',
@@ -256,7 +256,7 @@ export const MOCK_PROPERTIES: Property[] = [
   },
   {
     id: 'prop-5',
-    agent_id: 'usr-agent-elena',
+    agent_id: 'usr-agent-amina',
     neighborhood_id: 'neigh-riverside',
     slug: 'riverside-executive-loft',
     title: 'Riverside Executive Garden Loft',
@@ -288,7 +288,7 @@ export const MOCK_PROPERTIES: Property[] = [
   },
   {
     id: 'prop-6',
-    agent_id: 'usr-agent-marcus',
+    agent_id: 'usr-agent-kwame',
     neighborhood_id: 'neigh-karen',
     slug: 'muringa-crest-villa',
     title: 'Muringa Crest Mediterranean Villa',
@@ -319,7 +319,7 @@ export const MOCK_PROPERTIES: Property[] = [
   },
   {
     id: 'prop-7',
-    agent_id: 'usr-agent-tariq',
+    agent_id: 'usr-agent-juma',
     neighborhood_id: 'neigh-kitisuru',
     slug: 'the-monolith-modernist-villa',
     title: 'The Monolith Modernist Villa',
@@ -345,6 +345,99 @@ export const MOCK_PROPERTIES: Property[] = [
     updated_at: '2026-03-10T14:00:00Z',
     images: [
       { id: 'img-7-1', property_id: 'prop-7', storage_path: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80', position: 0 },
+    ]
+  },
+  {
+    id: 'prop-8',
+    agent_id: 'usr-agent-kwame',
+    neighborhood_id: 'neigh-muthaiga',
+    slug: 'the-ambassadorial-residence-muthaiga',
+    title: 'The Ambassadorial Residence Muthaiga',
+    description: 'A masterpiece of contemporary luxury situated on 1.5 acres of beautifully landscaped grounds. This residence features a private screening room, a fully equipped gym, a sweeping double staircase, and a 10-car underground garage. Perfect for discerning diplomats and high-profile executives.',
+    listing_type: 'buy',
+    status: 'published',
+    price: 310000000,
+    bedrooms: 6,
+    bathrooms: 8,
+    size_sqm: 1050,
+    lat: -1.2560,
+    lng: 36.8340,
+    address: 'Muthaiga Road, Nairobi',
+    featured: true,
+    amenities: [
+      'Private Screening Room',
+      'Underground 10-Car Garage',
+      'Heated Outdoor Pool',
+      'Professional Chef Kitchen',
+      'Separate Guest House'
+    ],
+    created_at: '2026-04-10T14:00:00Z',
+    updated_at: '2026-04-10T14:00:00Z',
+    images: [
+      { id: 'img-8-1', property_id: 'prop-8', storage_path: 'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=1400&q=80', position: 0 },
+      { id: 'img-8-2', property_id: 'prop-8', storage_path: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=1400&q=80', position: 1 },
+    ]
+  },
+  {
+    id: 'prop-9',
+    agent_id: 'usr-agent-amina',
+    neighborhood_id: 'neigh-karen',
+    slug: 'karen-equestrian-estate',
+    title: 'Karen Equestrian & Country Estate',
+    description: 'An idyllic 4-acre country estate with private stables, a riding arena, and direct access to forest trails. The main residence exudes rustic elegance with exposed timber beams, grand stone fireplaces, and an expansive wraparound veranda overlooking the paddocks.',
+    listing_type: 'buy',
+    status: 'published',
+    price: 450000000,
+    bedrooms: 7,
+    bathrooms: 6,
+    size_sqm: 900,
+    lat: -1.3300,
+    lng: 36.6900,
+    address: 'Bogani Road, Karen, Nairobi',
+    featured: true,
+    amenities: [
+      'Private Stables & Arena',
+      'Forest Trail Access',
+      'Wraparound Veranda',
+      'Stone Fireplaces',
+      'Staff Quarters for 6'
+    ],
+    created_at: '2026-04-15T09:00:00Z',
+    updated_at: '2026-04-15T10:00:00Z',
+    images: [
+      { id: 'img-9-1', property_id: 'prop-9', storage_path: 'https://images.unsplash.com/photo-1595521624992-48a59a495e8e?auto=format&fit=crop&w=1400&q=80', position: 0 },
+      { id: 'img-9-2', property_id: 'prop-9', storage_path: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1400&q=80', position: 1 },
+    ]
+  },
+  {
+    id: 'prop-10',
+    agent_id: 'usr-agent-juma',
+    neighborhood_id: 'neigh-riverside',
+    slug: 'riverside-zen-penthouse',
+    title: 'Riverside Zen Penthouse Suite',
+    description: 'A masterclass in modern minimalism, this fully automated smart penthouse features floating staircases, Japanese Zen gardens, and uninterrupted views of the Nairobi River. Ideal for tech entrepreneurs and expatriates seeking a tranquil oasis in the city.',
+    listing_type: 'rent',
+    status: 'published',
+    price: 420000,
+    bedrooms: 3,
+    bathrooms: 3,
+    size_sqm: 320,
+    lat: -1.2700,
+    lng: 36.7900,
+    address: 'Riverside Drive, Nairobi',
+    featured: false,
+    amenities: [
+      'Full Home Automation',
+      'Japanese Zen Garden',
+      'Floating Staircase',
+      'Floor-to-Ceiling Windows',
+      'Rooftop BBQ Area'
+    ],
+    created_at: '2026-04-20T11:00:00Z',
+    updated_at: '2026-04-20T11:00:00Z',
+    images: [
+      { id: 'img-10-1', property_id: 'prop-10', storage_path: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=80', position: 0 },
+      { id: 'img-10-2', property_id: 'prop-10', storage_path: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=80', position: 1 },
     ]
   }
 ];
@@ -383,7 +476,7 @@ While prime suburban homes deliver long-term capital preservation, high-end serv
   },
   {
     id: 'post-2',
-    author_id: 'usr-agent-marcus',
+    author_id: 'usr-agent-kwame',
     slug: 'guide-to-buying-heritage-estates-karen',
     title: 'The Discerning Buyer’s Guide to Acquiring Heritage Estates in Karen',
     summary: 'Essential due diligence parameters regarding title deed verification, riparian boundaries, and architectural preservation.',
@@ -406,7 +499,7 @@ Our senior advisors provide end-to-end guidance through deed verification, legal
   },
   {
     id: 'post-3',
-    author_id: 'usr-agent-elena',
+    author_id: 'usr-agent-amina',
     slug: 'architectural-trends-luxury-penthouses',
     title: 'Biophilic Design & Smart Microgrids: The New Benchmark in Luxury Penthouses',
     summary: 'How high-net-worth residents are prioritizing clean energy independence, acoustic isolation, and natural elements in sky residences.',
@@ -430,7 +523,7 @@ export const MOCK_LEADS: Lead[] = [
     type: 'viewing',
     status: 'new',
     property_id: 'prop-1',
-    assigned_agent_id: 'usr-agent-marcus',
+    assigned_agent_id: 'usr-agent-kwame',
     name: 'Jonathan Miller',
     email: 'j.miller@investment-holdings.co.uk',
     phone: '+44 7700 900123',
@@ -446,7 +539,7 @@ export const MOCK_LEADS: Lead[] = [
     type: 'valuation',
     status: 'contacted',
     property_id: null,
-    assigned_agent_id: 'usr-agent-elena',
+    assigned_agent_id: 'usr-agent-amina',
     name: 'Grace Wambui',
     email: 'gwambui@enterprises.ke',
     phone: '+254 722 999 888',
@@ -462,7 +555,7 @@ export const MOCK_LEADS: Lead[] = [
     type: 'contact',
     status: 'qualified',
     property_id: 'prop-3',
-    assigned_agent_id: 'usr-agent-elena',
+    assigned_agent_id: 'usr-agent-amina',
     name: 'Devin Thorne',
     email: 'devin.thorne@globalcapital.com',
     phone: '+1 415 555 2671',
@@ -476,7 +569,7 @@ export const MOCK_LEADS: Lead[] = [
     type: 'viewing',
     status: 'closed',
     property_id: 'prop-2',
-    assigned_agent_id: 'usr-agent-marcus',
+    assigned_agent_id: 'usr-agent-kwame',
     name: 'Ambassador Carl Lindqvist',
     email: 'carl.lindqvist@embassy-nordic.org',
     phone: '+254 700 888 111',

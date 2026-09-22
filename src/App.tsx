@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
-import { DevRoleSwitcher } from './components/shared/DevRoleSwitcher';
 import { RoleRoute } from './components/shared/RoleRoute';
 
 // Public Pages (21 routes)
@@ -195,9 +194,6 @@ export const App: React.FC = () => {
 
       {/* Public Footer */}
       {!isPortalRoute && <Footer />}
-
-      {/* Floating Developer Persona Switcher */}
-      <DevRoleSwitcher />
     </div>
   );
 };
